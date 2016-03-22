@@ -1,0 +1,37 @@
+#!/usr/bin/expect
+
+# CREATED BY: CHRISTOPHER NEUNER
+# EXPECT: EMC RecoverPoint ethtool
+# DESCRIPTION: This expect script will automate the inputs required to display ethernet (ethtool) details for both adapters.
+# DEPENDENCIES: Works in conjunction with 'expect-rpa-ethtool.exp'. Requires that "expect" package be installed.
+# USE: expect-rpa-ethtool.exp "<IP>" "<user>" "<password>"
+
+
+set ip [lindex $argv 0]
+
+set user [lindex $argv 1]
+
+set password [lindex $argv 2]
+
+spawn ssh -oStrictHostKeyChecking=no "$user\@$ip"
+
+expect -ex "Password:"
+
+send "$password\r";
+
+#expect -ex "Do you want to configure a temporary IP address? (y/n)?"
+#send "n\r"
+expect -re "Main Menu"
+send "3\r"
+expect -re "Diagnostics"
+send "5\r"
+expect -ex "Enter internal command:"
+send "ethtool eth0\r"
+expect -re "Diagnostics"
+send "5\r"
+expect -ex "Enter internal command:"
+send "ethtool eth1\r"
+expect -re "Diagnostics"
+send "q\r"
+expect -ex "Are you sure you want to quit (Default 'n') (y/n)?"
+send "y\r"

@@ -1,0 +1,35 @@
+#!/usr/bin/expect
+
+# CREATED BY: CHRISTOPHER NEUNER
+# EXPECT: EMC RecoverPoint View RPA Ports
+# DESCRIPTION: This expect script will automate the inputs required to display an RPA's local ports
+# DEPENDENCIES: Requires that "expect" package be installed.
+# USE: expect-rpa-ports.exp "<IP>" "<user>" "<password>"
+
+
+set ip [lindex $argv 0]
+
+set user [lindex $argv 1]
+
+set password [lindex $argv 2]
+
+spawn ssh -oStrictHostKeyChecking=no "$user\@$ip"
+
+expect -ex "Password:"
+
+send "$password\r";
+
+expect -ex "Do you want to configure a temporary IP address? (y/n)?"
+send "n\r"
+expect -re "selection"
+send "3\r"
+expect -re "selection"
+send "2\r"
+expect -re "selection"
+send "2\r"
+expect -ex "Would you like to display the remote ports? (y/n)?"
+send "n\r"
+expect -re "selection"
+send "q\r"
+expect -ex "Are you sure you want to quit (Default 'n') (y/n)?"
+send "y\r"
